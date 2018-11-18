@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recipes!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+ {{ include('nav.html.twig') }}
+
+<div class="example-wrapper">
+    <h1>Find your recipes</h1>
+
+    <div class="input-field col l12 m12 s12">
+  		<i class="small mdi-action-accessibility prefix"></i>
+  		<input type="text" id="autocomplete-input-recipes" class="autocomplete" data-target="autocomplete-options-bce63a83-5062-ce12-9b05-d1f12554c6f2">
+        <label class="center-align date-label">Find Recipes</label>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!--Ajax-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script type="text/javascript">
+
+			var recipes = {{ recipes|json_encode()|raw }};
+		    var dataRecipes = {};
+		    for (var i = 0; i < recipes.length; i++) {                              
+		        dataRecipes[recipes[i].title]  =  recipes[i].thumbnail; 
+		    }
+		    $('input#autocomplete-input-recipes').autocomplete({
+		          	data: dataRecipes,
+		          	limit: Infinity, // The max amount of results that can be shown at once. Default: Infinity.
+		          	onAutocomplete: function(val) {
+				      // Callback function when value is autcompleted.
+				    	var person = val.split(" ");
+				      	var id = person.slice(-1)[0]
+				   	},
+				    minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+		    });
+
+	</script>
+
+
+{% endblock %}
